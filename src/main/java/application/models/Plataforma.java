@@ -6,9 +6,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+ 
 import java.util.Set;
 import java.util.HashSet;
- 
 @Entity
 @Table(name="plataformas")
 public class Plataforma {
@@ -16,8 +16,8 @@ public class Plataforma {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     private String nome;
-
-    @ManyToMany(mappedBy = "plataforma")
+ 
+    @ManyToMany(mappedBy = "plataformas")
     private Set<Jogo> jogos = new HashSet<>();
  
     public void setId(int id) {

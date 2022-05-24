@@ -6,9 +6,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+ 
 import java.util.Set;
 import java.util.HashSet;
- 
 @Entity
 @Table(name="generos")
 public class Genero {
@@ -16,8 +16,8 @@ public class Genero {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     private String nome;
-
-    @OneToMany(mappedBy = "genero")
+ 
+    @OneToMany(mappedBy = "generos")
     private Set<Jogo> jogos = new HashSet<>();
  
     public void setId(int id) {
