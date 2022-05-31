@@ -1,6 +1,8 @@
 package application.controllers;
  
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
  
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -62,22 +64,35 @@ public class JogoController {
     @RequestMapping("update/{id}")
     public String formUpdate(Model model, @PathVariable int id) {
         Optional<Jogo> jogo = jogosRepo.findById(id);
-        
+
         if(!jogo.isPresent())
             return "redirect:/jogo/list";
-        model.addAttribute("jogo", jogo.get());
-        return "/jogo/update.jsp";
+
+        model.addAttribute("jogos", jogo.get());
+        model.addAttribute("generos", generosRepo.findAll());
+        model.addAttribute("plataformas", plataformasRepo.findAll());
+        return "/jogos/update.jsp";
+
     }
  
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public String saveUpdate(@RequestParam("nome") String nome, @RequestParam("id") int id) {
+    public String saveUpdate(@RequestParam("titulo") String titulo, @RequestParam("id") int id,
+    @RequestParam("genero") int generoId, @RequestParam(name="plataformas", required =false)int[] plataformas) {
         Optional<Jogo> jogo = jogosRepo.findById(id);
         if(!jogo.isPresent())
             return "redirect:/jogo/list";
-        jogo.get().setNome(nome);
+        jogo.get().setTitulo(titulo);
+        jogo.get().setGenero(generosRepo.findById(generoId).get);
+        Socket<Plataforma> updatePlataforma = new HashSet<>;
  
+        if(plataformas!=null)
+            for(int p: plataformas) {
+                Optional<Plataforma> plataforma = plataformasRepo.findById(p);
+                if(plataforma.isPresent())
+                    updatePlataforma.add(plataforma.get());
+            }
+            jogo.get().setPlataformas(updatePlataforma);
         jogosRepo.save(jogo.get());
- 
         return "redirect:/jogo/list";
     }
  
